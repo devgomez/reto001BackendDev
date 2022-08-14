@@ -10,36 +10,41 @@ import org.springframework.web.bind.annotation.RestController;
 import com.reto001.app.dto.customerDTO;
 import com.reto001.app.dto.indicadoresDTORequest;
 import com.reto001.app.dto.indicadoresDTOResponse;
+import com.reto001.app.repository.customerRepository;
 import com.reto001.app.servicio.customerService;
+import com.reto001.app.servicio.customerServiceImpl;
 
 @RestController
-public class customerControllerImpl  implements customerController {
-	
+public class customerControllerImpl implements customerController {
+
 	@Autowired
-	customerService service;
-	
+	customerRepository _repo;
+
+	customerService _service = new customerServiceImpl(_repo);
+
+	public customerControllerImpl(customerService service) {
+		this._service = service;
+	}
+
 	@Override
 	public ResponseEntity<customerDTO> crear(customerDTO request) throws Exception {
-		
-		
-		var created = service.Create(request);
 
-		return new  ResponseEntity<customerDTO> (created, HttpStatus.CREATED) ;
-		
-		
+		var created = _service.Create(request);
+
+		return new ResponseEntity<customerDTO>(created, HttpStatus.CREATED);
+
 	}
 
 	@Override
 	public ResponseEntity<List<customerDTO>> consultar(customerDTO request) throws Exception {
-		
-		return new  ResponseEntity<List<customerDTO>> (service.consultar(request), HttpStatus.OK);
+
+		return new ResponseEntity<List<customerDTO>>(_service.consultar(request), HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<indicadoresDTOResponse> consultarIndicadores(indicadoresDTORequest request) throws Exception {
-		return new  ResponseEntity<indicadoresDTOResponse> (service.getIndicadores(request), HttpStatus.OK);
+
+		return new ResponseEntity<indicadoresDTOResponse>(_service.getIndicadores(request), HttpStatus.OK);
 	}
-	
-	
 
 }

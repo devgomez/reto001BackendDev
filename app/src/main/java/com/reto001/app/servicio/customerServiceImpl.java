@@ -28,11 +28,16 @@ import com.reto001.app.repository.customerRepository;
 public class customerServiceImpl implements customerService {
 
 	@Autowired
-	customerRepository repo;
+	customerRepository repo ;	
+	
+	public customerServiceImpl(customerRepository repo) {
+		repo = this.repo;
+		
+	}
+	
 
 	@Override
 	public customerDTO Create(customerDTO request) throws Exception {
-		
 		request.setFechaCreacion(new Date());
 
 		customers cus = customerDtoToEntity.INSTANCE.apply(request);
